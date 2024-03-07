@@ -31,25 +31,27 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Enable appmap gem update
-        run: bundle config unset deployment 
-
       - uses: actions/setup-node@v3
         with:
           node-version: 14
           cache: 'yarn'
 
-      - name: Prepare bundle for AppMap installation
+      # Begin AppMap CI language agent installation
+      # This snippet can be safely removed once the AppMap language agent has been
+      # added to the project dependencies, and appmap.yml has been created.
+      - name: Enable appmap gem update
         run: bundle config unset deployment
-      
       - name: Install AppMap tools
         id: install-appmap
         uses: getappmap/install-action@v1
         with:
-          project-type: bundler # Choose the type of your project here:
-                        # bundler, maven, gradle, pip, pipenv, poetry,
-                        # yarn, npm, etc.
-  
+          project-type: bundler
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "ci: Add AppMap language agent and appmap.yml"
+      # End AppMap CI language agent installation
+
       - name: Yarn install
         run: yarn install
 
