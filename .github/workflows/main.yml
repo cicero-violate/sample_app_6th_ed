@@ -36,7 +36,7 @@ jobs:
         run: ./bin/rails test
 
       - name: Save AppMaps
-        uses: actions/cache/save@v3
+        uses: actions/cache@v3
         if: always()
         with:
           path: ./tmp/appmap
@@ -48,6 +48,6 @@ jobs:
     uses: getappmap/analyze-action/.github/workflows/appmap-analysis.yml@v1
     permissions:
       actions: read
-      contents: write
+      contents: read
       checks: write
       pull-requests: write
