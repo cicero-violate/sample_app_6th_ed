@@ -19,25 +19,11 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Enable appmap gem update
-        run: bundle config unset deployment 
-
       - uses: actions/setup-node@v3
         with:
           node-version: 14
           cache: 'yarn'
 
-      - name: Prepare bundle for AppMap installation
-        run: bundle config unset deployment
-      
-      - name: Install AppMap tools
-        id: install-appmap
-        uses: getappmap/install-action@v1
-        with:
-          project-type: bundler # Choose the type of your project here:
-                        # bundler, maven, gradle, pip, pipenv, poetry,
-                        # yarn, npm, etc.
-  
       - name: Yarn install
         run: yarn install
 
@@ -50,15 +36,15 @@ jobs:
         run: ./bin/rails test
 
       - name: Save AppMaps
-        uses: actions/cache/save@v3
+        uses: actions/cache@v3
         if: always()
         with:
           path: ./tmp/appmap
           key: appmaps-${{ github.sha }}-${{ github.run_attempt }}
-  
+
   appmap-analysis:
     if: always()
-    needs: [test] # You may need to change this to match the name of the step that runs your tests.
+    needs: [test]
     uses: getappmap/analyze-action/.github/workflows/appmap-analysis.yml@v1
     permissions:
       actions: read
